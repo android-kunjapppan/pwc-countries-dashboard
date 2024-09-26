@@ -18,7 +18,7 @@ const RegionsList = ({ filterRegion, setFilterRegion, regions }: Props) => {
         <MenuItem value="">
         <em>All Regions</em>
         </MenuItem>
-        {[].map((region: any, index: any) => (
+        {regions.map((region: any, index: any) => (
             <MenuItem key={index} value={region}>
                 {region}
             </MenuItem>

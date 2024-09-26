@@ -52,6 +52,7 @@ const CardDashboard = (props: Props) => {
 
   // Unique list of regions from the country data
   const regions = Array.from(new Set(countriesData?.map((country: any) => country.region)));
+  console.log(regions)
 
 
   if (isLoading) {
@@ -63,26 +64,29 @@ const CardDashboard = (props: Props) => {
   }
 
   // Filtering and then sorting the data by name
-  const filteredAndSortedCountries = countriesData?
-    .filter((item: any) => {
-      // Match country name or capital based on the search term
-      const nameMatch = item.name?.common?.toLowerCase().includes(searchTerm.toLowerCase());
-      const capitalMatch = item.capital?.some((cap: string) =>
-        cap.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      
-      // Filter by region if selected
-      const regionMatch = filterRegion === '' || item.region === filterRegion;
+const filteredAndSortedCountries = countriesData
+  ?.filter((item: any) => {
+    // Match country name or capital based on the search term
+    const nameMatch = item.name?.common?.toLowerCase().includes(searchTerm.toLowerCase()) || false;
+    
+    // Ensure item.capital exists and is an array before calling some()
+    const capitalMatch = item.capital?.length && item.capital.some((cap: string) =>
+      cap.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
-      return (nameMatch || capitalMatch) && regionMatch;
-    })
-    .sort((a: any, b: any) => {
-      if (sortAscending) {
-        return a.name.common.localeCompare(b.name.common);
-      } else {
-        return b.name.common.localeCompare(a.name.common);
-      }
-    });
+    // Filter by region if selected
+    const regionMatch = filterRegion === '' || item.region === filterRegion;
+
+    return (nameMatch || capitalMatch) && regionMatch;
+  })
+  .sort((a: any, b: any) => {
+    if (sortAscending) {
+      return a.name?.common?.localeCompare(b.name?.common);
+    } else {
+      return b.name?.common?.localeCompare(a.name?.common);
+    }
+  });
+
   
   
     // Open modal and set selected country
